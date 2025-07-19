@@ -113,7 +113,25 @@ uvx mcp-server-qdrant --transport sse
 
 ### Using Docker
 
-A Dockerfile is available for building and running the MCP server:
+#### Using Pre-built Images
+
+Pre-built Docker images are available from GitHub Container Registry:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/wolfschanze-berlin/mcp-server-qdrant:latest
+
+# Run the container
+docker run -p 8000:8000 \
+  -e QDRANT_URL="http://your-qdrant-server:6333" \
+  -e QDRANT_API_KEY="your-api-key" \
+  -e COLLECTION_NAME="your-collection" \
+  ghcr.io/wolfschanze-berlin/mcp-server-qdrant:latest
+```
+
+#### Building from Source
+
+A Dockerfile is available for building and running the MCP server from source:
 
 ```bash
 # Build the container
@@ -121,7 +139,6 @@ docker build -t mcp-server-qdrant .
 
 # Run the container
 docker run -p 8000:8000 \
-  -e FASTMCP_HOST="0.0.0.0" \
   -e QDRANT_URL="http://your-qdrant-server:6333" \
   -e QDRANT_API_KEY="your-api-key" \
   -e COLLECTION_NAME="your-collection" \
@@ -129,8 +146,8 @@ docker run -p 8000:8000 \
 ```
 
 > [!TIP]
-> Please note that we set `FASTMCP_HOST="0.0.0.0"` to make the server listen on all network interfaces. This is
-> necessary when running the server in a Docker container.
+> The Docker container automatically sets `FASTMCP_HOST="0.0.0.0"` to listen on all network interfaces.
+> For security, the API key should be provided at runtime rather than built into the image.
 
 ### Installing via Smithery
 
@@ -366,7 +383,7 @@ Or if you prefer using Docker, add this configuration instead:
           "-e", "QDRANT_URL",
           "-e", "QDRANT_API_KEY",
           "-e", "COLLECTION_NAME",
-          "mcp-server-qdrant"
+          "ghcr.io/wolfschanze-berlin/mcp-server-qdrant:latest"
         ],
         "env": {
           "QDRANT_URL": "${input:qdrantUrl}",
@@ -448,7 +465,7 @@ For workspace configuration with Docker, use this in `.vscode/mcp.json`:
         "-e", "QDRANT_URL",
         "-e", "QDRANT_API_KEY",
         "-e", "COLLECTION_NAME",
-        "mcp-server-qdrant"
+        "ghcr.io/wolfschanze-berlin/mcp-server-qdrant:latest"
       ],
       "env": {
         "QDRANT_URL": "${input:qdrantUrl}",
